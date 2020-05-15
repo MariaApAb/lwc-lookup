@@ -7,7 +7,7 @@ public with sharing class LookupController {
             SELECT Id, Name, Phone 
             FROM Account
             WHERE Name LIKE :key
-            LIMIT 10
+            LIMIT 5
         ];
     }
 

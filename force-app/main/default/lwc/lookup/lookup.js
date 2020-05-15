@@ -8,30 +8,38 @@ export default class Lookup extends LightningElement {
     @api titleApiName;
     @api subtitleApiName;
     @api iconName;
-    @api sobjects;
-    error;
+    @api sobjects = [];
+    isOpen = true;
+    _error;
 
-    searchKey = '';
-    
-    @wire(findSObjects, { searchKey: "$searchKey" })
-    wiredSObjects({ error, data }) {
-        if (data) {
-            this.sobjects = data;
-            this.error = undefined;
-            console.log(this.sobjects);
-        } else if (error) {
-            this.error = error;
-            this.sobjects = undefined;
-        }
+    handleOnClick() {
+
     }
 
     search(e) {
         //alert(e.target.value);
-        window.clearTimeout(this.delayTimeout);
+        /*window.clearTimeout(this.delayTimeout);
         const searchKey = e.target.value;
         this.delayTimeout = setTimeout(() => {
             this.searchKey = searchKey;
             if (this.searchKey == null || this.searchKey == "") this.sobjects = [];
-        }, DELAY);
+        }, DELAY);*/
+        console.log({ searchKey : e.target.value});
+        if (e.target.value != null && e.target.value != ''){
+            findSObjects({ searchKey : e.target.value})
+                .then(result => {
+                    console.log(this.isOpen);
+                    this.sobjects = result;
+                    this.isOpen = true;
+                    console.log(this.sobjects);
+                    console.log(this.isOpen);
+                })
+                .catch(error => {
+                    this._error = error;
+                    console.log(this._error);
+                });
+        } else {
+            this.sobjects = [];
+        }
     }
 }
