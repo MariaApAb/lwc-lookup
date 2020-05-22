@@ -4,35 +4,28 @@ import findSObjects from '@salesforce/apex/LookupController.findSObjects';
 const DELAY = 300;
 
 export default class Lookup extends LightningElement {
+    //TODO: busca los elementos pero no se ven, hay que poner una altula min al div o al ul de los items
+    //TODO: bajar el z-index al div o ul
 	@api recordApiName;
     @api titleApiName;
     @api subtitleApiName;
     @api iconName;
     @api sobjects = [];
-    isOpen = true;
+    isOpen = false;
     _error;
 
-    handleOnClick() {
+    handleOnClick(e) {
 
     }
 
     search(e) {
-        //alert(e.target.value);
-        /*window.clearTimeout(this.delayTimeout);
-        const searchKey = e.target.value;
-        this.delayTimeout = setTimeout(() => {
-            this.searchKey = searchKey;
-            if (this.searchKey == null || this.searchKey == "") this.sobjects = [];
-        }, DELAY);*/
-        console.log({ searchKey : e.target.value});
         if (e.target.value != null && e.target.value != ''){
-            findSObjects({ searchKey : e.target.value})
+            findSObjects({ searchKey : e.target.value, recordApiName : this.recordApiName, titleApiName : this.titleApiName, subtitleApiName : this.subtitleApiName})
                 .then(result => {
                     console.log(this.isOpen);
                     this.sobjects = result;
                     this.isOpen = true;
                     console.log(this.sobjects);
-                    console.log(this.isOpen);
                 })
                 .catch(error => {
                     this._error = error;
@@ -40,6 +33,7 @@ export default class Lookup extends LightningElement {
                 });
         } else {
             this.sobjects = [];
+            this.isOpen = false;
         }
     }
 }
