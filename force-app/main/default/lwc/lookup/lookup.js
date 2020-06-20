@@ -1,39 +1,58 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import findSObjects from '@salesforce/apex/LookupController.findSObjects';
 
-const DELAY = 300;
-
 export default class Lookup extends LightningElement {
-    //TODO: busca los elementos pero no se ven, hay que poner una altula min al div o al ul de los items
-    //TODO: bajar el z-index al div o ul
 	@api recordApiName;
     @api titleApiName;
     @api subtitleApiName;
     @api iconName;
+    @api labelHidden;
+    @api label;
     @api sobjects = [];
+    @api selected;
     isOpen = false;
+    searchKey;
     _error;
+    _container;
 
-    handleOnClick(e) {
+    renderedCallback() {
+        this._container = this.template.querySelector('[data-id=container]');
+    }
 
+    handleOnClick(sobj) {
+        return function() {
+            console.log(index);
+            this.selected = sobj;
+            console.log(this.selected);
+        }
     }
 
     search(e) {
-        if (e.target.value != null && e.target.value != ''){
-            findSObjects({ searchKey : e.target.value, recordApiName : this.recordApiName, titleApiName : this.titleApiName, subtitleApiName : this.subtitleApiName})
+        this.searchKey = e.target.value;
+        if (this.searchKey != null && this.searchKey != ''){
+            findSObjects({ searchKey : this.searchKey, recordApiName : this.recordApiName, titleApiName : this.titleApiName, subtitleApiName : this.subtitleApiName })
                 .then(result => {
-                    console.log(this.isOpen);
                     this.sobjects = result;
-                    this.isOpen = true;
-                    console.log(this.sobjects);
                 })
                 .catch(error => {
                     this._error = error;
-                    console.log(this._error);
                 });
         } else {
             this.sobjects = [];
-            this.isOpen = false;
+        }
+        this.displayList();
+        this.addOnClickEvent();
+    }
+
+    displayList() {
+        this.isOpen = this.searchKey != null && this.searchKey != "";
+        if (this.isOpen) this._container.classList.add("slds-is-open");
+        else this._container.classList.remove("slds-is-open");
+    }
+
+    addOnClickEvent() {
+        for (let listItem of this.template.querySelectorAll("li.myListItem")){
+            listItem.addEventListener("click", this.handleOnClick(this.sobjects[parseInt(listItem.dataset.id)]), true);
         }
     }
 }

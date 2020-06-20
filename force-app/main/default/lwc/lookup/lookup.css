@@ -1,0 +1,6 @@
+.cLookup .slds-dropdown {
+    z-index: 98 !important;
+}
+.cLookup .searchOption {
+    padding: 0.25rem 0.75rem;
+}

@@ -1,8 +1,9 @@
-<template>  
-    <div class="slds-form-element" style="padding: 15px;">{recordApiName} - {titleApiName} - {subtitleApiName} - {iconName} - {searchText}
-        <div class="slds-form-element__control" onclick={handleOnClick} onblur={handleOnBlur}>
+<template>
+    <label if:false={labelHidden} class="slds-form-element__label">{label}</label> 
+    <div class="cLookup slds-form-element">
+        <div class="slds-form-element__control" onblur={handleOnBlur}>
             <div class="slds-combobox_container">
-                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                <div data-id="container" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
                         <lightning-input
                             name="enter-search"
@@ -11,20 +12,35 @@
                             variant="label-hidden"
                             placeholder="Search..."
                             onchange={search}
-                            value={searchKey}
                         ></lightning-input>
                     </div>
                     <div if:true={isOpen} class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
                         <ul class="slds-listbox slds-listbox_vertical" role="presentation">
-                            <template for:each={sobjects} for:item="sobj">
-                                <li key={sobj.id} role="presentation" class="slds-listbox__item" onclick={handleOnClick}>
+                            <li role="presentation" class="slds-listbox__item">
+                                <div aria-selected="true" id="option0" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_term slds-has-focus" role="option">
+                                    <span class="slds-media__figure slds-listbox__option-icon">
+                                        <lightning-icon icon-name="utility:search" size="x-small" alternative-text="Search"></lightning-icon>
+                                    </span>
+                                    <span class="slds-media__body">
+                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">"{searchKey}" in {recordApiName}</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <template for:each={sobjects} for:item="sobj" for:index="index">
+                                <li key={sobj.id} data-id={index} role="presentation" class="slds-listbox__item myListItem">
                                     <div id={sobj.id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
                                         <span class="slds-media__figure slds-listbox__option-icon">
-                                            <lightning-icon icon-name="standard:account" size="small" alternative-text="Account"></lightning-icon>
+                                            <lightning-icon icon-name={iconName} size="small" alternative-text="Account"></lightning-icon>
                                         </span>
                                         <span class="slds-media__body">
-                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">{sobj.titleApiName}</span>
-                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{sobj.subtitleApiName}</span>
+                                            <!--<span class="slds-listbox__option-text slds-listbox__option-text_entity">{sobj.title}</span>-->
+                                            <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                                                <template for:each={sobj.titleParts} for:item="t">
+                                                    <span if:false={t.strong} key={t.key}>{t.part}</span>
+                                                    <strong if:true={t.strong} key={t.key}>{t.part}</strong>
+                                                </template>
+                                            </span>
+                                            <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{sobj.subtitle}</span>
                                         </span>
                                     </div>
                                 </li>
