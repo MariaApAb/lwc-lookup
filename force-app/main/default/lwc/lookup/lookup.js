@@ -1,6 +1,12 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import findSObjects from '@salesforce/apex/LookupController.findSObjects';
 
+/*const greetingMaker = function(greeting){
+    return function(whoGreeting){
+        console.log(greeting);
+        return greeting + ", " + whoGreeting + "!";
+    }
+}*/
 export default class Lookup extends LightningElement {
 	@api recordApiName;
     @api titleApiName;
@@ -9,22 +15,30 @@ export default class Lookup extends LightningElement {
     @api labelHidden;
     @api label;
     @api sobjects = [];
-    @api selected;
+    @api selectedObj; //= {id: "0011i00000f1W5VAAU", subtitle: "000111222", title: "Hola Hola"};
+    @api selected = false;
+    //selected = false;
     isOpen = false;
     searchKey;
+    placeholder;
     _error;
     _container;
 
     renderedCallback() {
-        this._container = this.template.querySelector('[data-id=container]');
+        this._container = this.template.querySelector('[data-id=combobox]');
+        this.placeholder = "Search " + this.recordApiName + "...";
     }
 
-    handleOnClick(sobj) {
-        return function() {
-            console.log(index);
-            this.selected = sobj;
-            console.log(this.selected);
-        }
+    handleOnClick(e){
+        this.selectedObj = this.sobjects[parseInt(e.currentTarget.dataset.index)];
+        this.selected = true;
+        //this.template.querySelector('[data-id=comboboxContainer]').classList.add("slds-has-selection");
+    }
+
+    removeSelected(){
+        console.log("removeSelected");
+        this.selectedObj = null;
+        this.selected = false;
     }
 
     search(e) {
@@ -41,7 +55,7 @@ export default class Lookup extends LightningElement {
             this.sobjects = [];
         }
         this.displayList();
-        this.addOnClickEvent();
+        //this.addOnClickEvent();
     }
 
     displayList() {
@@ -50,9 +64,9 @@ export default class Lookup extends LightningElement {
         else this._container.classList.remove("slds-is-open");
     }
 
-    addOnClickEvent() {
+    /*addOnClickEvent() {
         for (let listItem of this.template.querySelectorAll("li.myListItem")){
-            listItem.addEventListener("click", this.handleOnClick(this.sobjects[parseInt(listItem.dataset.id)]), true);
+            listItem.addEventListener("click", this.handleOnClick(this.sobjects[parseInt(listItem.dataset.id)]));
         }
-    }
+    }*/
 }

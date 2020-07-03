@@ -1,16 +1,39 @@
 <template>
-    <label if:false={labelHidden} class="slds-form-element__label">{label}</label> 
+    <label if:false={labelHidden} class="slds-form-element__label">{label}</label>
     <div class="cLookup slds-form-element">
         <div class="slds-form-element__control" onblur={handleOnBlur}>
-            <div class="slds-combobox_container">
-                <div data-id="container" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+            <div data-id="comboboxContainer" class="slds-combobox_container">
+                <div if:true={selected} class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none"><!-- slds-has-selection-->
+                        <span class="slds-icon_container slds-combobox__input-entity-icon" title="Account">
+                            <lightning-icon icon-name="standard:account" size="x-small" alternative-text="Search"></lightning-icon>
+                        </span>
+                        <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" value={selectedObj.title} readonly/>
+                        <!--<lightning-button-icon
+                            class="slds-input__icon-group slds-input__icon-group_right slds-input__icon_right"
+                            size="medium" 
+                            icon-name="utility:close" 
+                            variant="bare" 
+                            alternative-text="Clear Selection" 
+                            title="Clear Selection"
+                            onclick={removeSelected}
+                        ></lightning-button-icon>-->
+                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                            <button type="button" title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick={removeSelected}>
+                                <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Search"></lightning-icon>
+                                <span class="slds-assistive-text">Clear Selection</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div if:false={selected} data-id="combobox" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
                         <lightning-input
                             name="enter-search"
                             label="Tags"
                             type="search"
                             variant="label-hidden"
-                            placeholder="Search..."
+                            placeholder={placeholder}
                             onchange={search}
                         ></lightning-input>
                     </div>
@@ -28,7 +51,7 @@
                             </li>
                             <template for:each={sobjects} for:item="sobj" for:index="index">
                                 <li key={sobj.id} data-id={index} role="presentation" class="slds-listbox__item myListItem">
-                                    <div id={sobj.id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                    <span id={sobj.id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option" data-index={index} onclick={handleOnClick}>
                                         <span class="slds-media__figure slds-listbox__option-icon">
                                             <lightning-icon icon-name={iconName} size="small" alternative-text="Account"></lightning-icon>
                                         </span>
@@ -42,7 +65,7 @@
                                             </span>
                                             <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{sobj.subtitle}</span>
                                         </span>
-                                    </div>
+                                    </span>
                                 </li>
                             </template>
                         </ul>
