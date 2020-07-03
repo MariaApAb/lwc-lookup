@@ -1,12 +1,6 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import findSObjects from '@salesforce/apex/LookupController.findSObjects';
 
-/*const greetingMaker = function(greeting){
-    return function(whoGreeting){
-        console.log(greeting);
-        return greeting + ", " + whoGreeting + "!";
-    }
-}*/
 export default class Lookup extends LightningElement {
 	@api recordApiName;
     @api titleApiName;
@@ -14,10 +8,9 @@ export default class Lookup extends LightningElement {
     @api iconName;
     @api labelHidden;
     @api label;
-    @api sobjects = [];
     @api selectedObj; //= {id: "0011i00000f1W5VAAU", subtitle: "000111222", title: "Hola Hola"};
-    @api selected = false;
-    //selected = false;
+    sobjects = [];
+    selected = false;
     isOpen = false;
     searchKey;
     placeholder;

@@ -3,10 +3,24 @@ public with sharing class LookupController {
     @AuraEnabled(cacheable=true)
     public static List<Result> findSObjects(String searchKey, String recordApiName, String titleApiName, String subtitleApiName) {
         //System.debug('SELECT ' + titleApiName + ', ' + subtitleApiName + ' FROM ' + recordApiName + ' WHERE ' + titleApiName + ' LIKE \'%' + searchKey + '%\' LIMIT 5');
+        List<String> arguments = new List<String>{
+            '\'' + String.escapeSingleQuotes(searchKey) + '\'',
+            String.escapeSingleQuotes(recordApiName),
+            String.escapeSingleQuotes(titleApiName),
+            String.escapeSingleQuotes(subtitleApiName)
+        };
         List<Result> results = new List<Result>();
-        for (SObject sobj : Database.query('SELECT ' + titleApiName + ', ' + subtitleApiName + ' FROM ' + recordApiName + ' WHERE ' + titleApiName + ' LIKE \'%' + searchKey + '%\' LIMIT 4')) {
-            results.add(new Result(searchKey, (Id)sobj.get('Id'), String.valueOf(sobj.get(titleApiName)), String.valueOf(sobj.get(subtitleApiName))));
+        String searchQuery = String.format('FIND {0} IN ALL FIELDS RETURNING {1} (Id, {2}, {3}) LIMIT 5', arguments);
+        List<List<SObject>> result = Search.query(searchQuery);
+        System.debug(result);
+        if (!result.isEmpty()) {
+            for (SObject sobj : result[0]) {
+                results.add(new Result(searchKey, (Id)sobj.get('Id'), String.valueOf(sobj.get(titleApiName)), String.valueOf(sobj.get(subtitleApiName))));
+            }
         }
+        /*for (SObject sobj : Database.query('SELECT ' + titleApiName + ', ' + subtitleApiName + ' FROM ' + recordApiName + ' WHERE ' + titleApiName + ' LIKE \'%' + searchKey + '%\' LIMIT 4')) {
+            results.add(new Result(searchKey, (Id)sobj.get('Id'), String.valueOf(sobj.get(titleApiName)), String.valueOf(sobj.get(subtitleApiName))));
+        }*/
         System.debug(results);
         return results;
     }
@@ -22,7 +36,6 @@ public with sharing class LookupController {
             this.subtitle = subtitle;
             this.titleParts = new List<TitlePart>();
             getTitle(searchKey, title);
-            System.debug(titleParts);
         }
         private void getTitle(String searchKey, String title) {
             Integer indexOf = title.toUpperCase().indexOf(searchKey.toUpperCase());
