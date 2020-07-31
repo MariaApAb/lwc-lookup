@@ -5,7 +5,7 @@
             <div data-id="comboboxContainer" class="slds-combobox_container">
                 <div if:true={selected} class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none"><!-- slds-has-selection-->
-                        <span class="slds-icon_container slds-combobox__input-entity-icon" title="Account">
+                        <span class="slds-icon_container slds-combobox__input-entity-icon">
                             <lightning-icon icon-name="standard:account" size="x-small" alternative-text="Search"></lightning-icon>
                         </span>
                         <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" value={selectedObj.title} readonly/>
@@ -45,7 +45,7 @@
                                         <lightning-icon icon-name="utility:search" size="x-small" alternative-text="Search"></lightning-icon>
                                     </span>
                                     <span class="slds-media__body">
-                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">"{searchKey}" in {recordApiName}</span>
+                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">"{searchKey}" in {sobjectApiName}</span>
                                     </span>
                                 </div>
                             </li>

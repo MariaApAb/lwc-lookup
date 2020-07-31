@@ -2,7 +2,7 @@ import { LightningElement, api, wire, track } from 'lwc';
 import findSObjects from '@salesforce/apex/LookupController.findSObjects';
 
 export default class Lookup extends LightningElement {
-	@api recordApiName;
+	@api sobjectApiName;
     @api titleApiName;
     @api subtitleApiName;
     @api iconName;
@@ -18,13 +18,15 @@ export default class Lookup extends LightningElement {
     _container;
 
     renderedCallback() {
+        console.log(this.sobjectApiName);
         this._container = this.template.querySelector('[data-id=combobox]');
-        this.placeholder = "Search " + this.recordApiName + "...";
+        this.placeholder = "Search " + this.sobjectApiName + "...";
     }
 
     handleOnClick(e){
         this.selectedObj = this.sobjects[parseInt(e.currentTarget.dataset.index)];
         this.selected = true;
+        this.dispatchEvent(new CustomEvent('change'));
         //this.template.querySelector('[data-id=comboboxContainer]').classList.add("slds-has-selection");
     }
 
@@ -32,12 +34,13 @@ export default class Lookup extends LightningElement {
         console.log("removeSelected");
         this.selectedObj = null;
         this.selected = false;
+        this.dispatchEvent(new CustomEvent('change'));
     }
 
     search(e) {
         this.searchKey = e.target.value;
         if (this.searchKey != null && this.searchKey != ''){
-            findSObjects({ searchKey : this.searchKey, recordApiName : this.recordApiName, titleApiName : this.titleApiName, subtitleApiName : this.subtitleApiName })
+            findSObjects({ searchKey : this.searchKey, sobjectApiName : this.sobjectApiName, titleApiName : this.titleApiName, subtitleApiName : this.subtitleApiName })
                 .then(result => {
                     this.sobjects = result;
                 })
