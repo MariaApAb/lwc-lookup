@@ -26,15 +26,15 @@ export default class Lookup extends LightningElement {
     handleOnClick(e){
         this.selectedObj = this.sobjects[parseInt(e.currentTarget.dataset.index)];
         this.selected = true;
-        this.dispatchEvent(new CustomEvent('change'));
+        this.dispatchEvent(new CustomEvent("select", { detail: this.selectedObj }));
         //this.template.querySelector('[data-id=comboboxContainer]').classList.add("slds-has-selection");
     }
 
     removeSelected(){
         console.log("removeSelected");
         this.selectedObj = null;
-        this.selected = false;
-        this.dispatchEvent(new CustomEvent('change'));
+        this.selected = false;       
+        this.dispatchEvent(new CustomEvent("select"), { detail: null });
     }
 
     search(e) {
