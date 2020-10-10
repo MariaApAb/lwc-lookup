@@ -35,8 +35,8 @@ public with sharing class LookupController {
             getTitle(searchKey, title);
         }
         private void getTitle(String searchKey, String title) {
-            Integer indexOf = title.toUpperCase().indexOf(searchKey.toUpperCase());
-            List<String> parts = title.split('/' + indexOf + '/i');
+            Integer indexOf = title.indexOfIgnoreCase(searchKey);
+            List<String> parts = title.split('/' + searchKey + '/i', 1);
             if (indexOf != -1) {
                 if (indexOf == 0) {
                     this.titleParts.add(new TitlePart(this.id + '0', title.substring(0, searchKey.length()), true));
