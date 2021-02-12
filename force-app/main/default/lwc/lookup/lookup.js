@@ -18,12 +18,12 @@ export default class Lookup extends LightningElement {
     _container;
 
     renderedCallback() {
-        console.log(this.sobjectApiName);
         this._container = this.template.querySelector('[data-id=combobox]');
         this.placeholder = "Search " + this.sobjectApiName + "...";
     }
 
     handleOnClick(e){
+        console.log("handleOnClick");
         this.selectedObj = this.sobjects[parseInt(e.currentTarget.dataset.index)];
         this.selected = true;
         this.dispatchEvent(new CustomEvent("select", { detail: this.selectedObj }));
@@ -34,7 +34,7 @@ export default class Lookup extends LightningElement {
         console.log("removeSelected");
         this.selectedObj = null;
         this.selected = false;       
-        this.dispatchEvent(new CustomEvent("select"), { detail: null });
+        this.dispatchEvent(new CustomEvent("select", { detail: null }));
     }
 
     search(e) {
@@ -58,6 +58,10 @@ export default class Lookup extends LightningElement {
         this.isOpen = this.searchKey != null && this.searchKey != "";
         if (this.isOpen) this._container.classList.add("slds-is-open");
         else this._container.classList.remove("slds-is-open");
+    }
+
+    openModal() {
+        alert("soy un modal feo");
     }
 
     /*addOnClickEvent() {
