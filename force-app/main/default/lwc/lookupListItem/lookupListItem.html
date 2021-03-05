@@ -1,0 +1,18 @@
+<template>
+    <li key={sobj.id} data-id={index} role="presentation" class="slds-listbox__item myListItem">
+        <span id={sobj.id} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option" data-index={index} onclick={handleOnClick}>
+            <span class="slds-media__figure slds-listbox__option-icon">
+                <lightning-icon icon-name={iconName} size="small"></lightning-icon>
+            </span>
+            <span class="slds-media__body">
+                <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                    <template for:each={sobj.titleParts} for:item="t">
+                        <span if:false={t.strong} key={t.key}>{t.part}</span>
+                        <strong if:true={t.strong} key={t.key}>{t.part}</strong>
+                    </template>
+                </span>
+                <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{sobj.subtitle}</span>
+            </span>
+        </span>
+    </li>
+</template>

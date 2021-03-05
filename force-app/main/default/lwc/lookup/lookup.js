@@ -28,8 +28,8 @@ export default class Lookup extends LightningElement {
     this.selectedObj = this.defaultSelectedRecord;
   }
 
-  handleOnClick(e) {
-    this.selectedObj = this.sobjects[parseInt(e.currentTarget.dataset.index)];
+  handleItemClick(e) {
+    this.selectedObj = e.detail;//this.sobjects[parseInt(e.currentTarget.dataset.index)];
     this.selected = true;
     this.dispatchEvent(new CustomEvent("select", { detail: this.selectedObj }));
   }
