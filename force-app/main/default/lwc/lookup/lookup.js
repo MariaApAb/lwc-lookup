@@ -2,72 +2,85 @@ import { LightningElement, api, track } from "lwc";
 import findSObjects from "@salesforce/apex/LookupController.findSObjects";
 
 export default class Lookup extends LightningElement {
-  @api sobjectApiName;
-  @api titleApiName;
-  @api subtitleApiName;
-  @api iconName;
-  @api labelHidden;
-  @api label;
-  @api defaultSelectedRecord;
+    @api sobjectApiName;
+    @api titleApiName;
+    @api subtitleApiName;
+    @api iconName;
+    @api labelHidden;
+    @api label;
+    @api defaultSelectedRecord;
 
-  @track selectedObj;
-  @track sobjects = [];
-  @track selected = false;
-  @track isOpen = false;
-  @track searchKey;
-  placeholder;
-  _error;
-  _container;
+    @track selectedObj;
+    @track sobjects = [];
+    @track selected = false;
+    @track isOpen = false;
+    @track searchKey;
+    @track displayModal = false;
 
-  renderedCallback() {
-    this._container = this.template.querySelector("[data-id=combobox]");
-    this.placeholder = "Search " + this.sobjectApiName + "...";
-  }
+    placeholder;
+    _error;
+    _container;
 
-  connectedCallback() {
-    this.selectedObj = this.defaultSelectedRecord;
-  }
-
-  handleItemClick(e) {
-    this.selectedObj = e.detail;//this.sobjects[parseInt(e.currentTarget.dataset.index)];
-    this.selected = true;
-    this.dispatchEvent(new CustomEvent("select", { detail: this.selectedObj }));
-  }
-
-  removeSelected() {
-    this.selectedObj = null;
-    this.selected = false;
-    this.dispatchEvent(new CustomEvent("select", { detail: null }));
-  }
-
-  search(e) {
-    this.searchKey = e.target.value;
-    if (this.searchKey != null && this.searchKey != "") {
-      findSObjects({
-        searchKey: this.searchKey,
-        sobjectApiName: this.sobjectApiName,
-        titleApiName: this.titleApiName,
-        subtitleApiName: this.subtitleApiName
-      })
-        .then((result) => {
-          this.sobjects = result;
-        })
-        .catch((error) => {
-          this._error = error;
-        });
-    } else {
-      this.sobjects = [];
+    renderedCallback() {
+        this._container = this.template.querySelector("[data-id=combobox]");
+        this.placeholder = "Search " + this.sobjectApiName + "...";
     }
-    this.displayList();
-  }
 
-  displayList() {
-    this.isOpen = this.searchKey != null && this.searchKey != "";
-    if (this.isOpen) this._container.classList.add("slds-is-open");
-    else this._container.classList.remove("slds-is-open");
-  }
+    connectedCallback() {
+        this.selectedObj = this.defaultSelectedRecord;
+    }
 
-  openModal() {
-    alert("soy un modal feo");
-  }
+    handleItemClick(e) {
+        this.selectedObj = e.detail; //this.sobjects[parseInt(e.currentTarget.dataset.index)];
+        this.selected = true;
+        this.dispatchEvent(new CustomEvent("select", { detail: this.selectedObj }));
+    }
+
+    removeSelected() {
+        this.selectedObj = null;
+        this.selected = false;
+        this.dispatchEvent(new CustomEvent("select", { detail: null }));
+    }
+
+    search(e) {
+        this.searchKey = e.target.value;
+        if (this.searchKey != null && this.searchKey != "") {
+            findSObjects({
+                searchKey: this.searchKey,
+                sobjectApiName: this.sobjectApiName,
+                titleApiName: this.titleApiName,
+                subtitleApiName: this.subtitleApiName
+            })
+                .then((result) => {
+                    this.sobjects = result;
+                })
+                .catch((error) => {
+                    this._error = error;
+                });
+        } else {
+            this.sobjects = [];
+        }
+        this.displayList();
+    }
+
+    displayList() {
+        this.isOpen = this.searchKey != null && this.searchKey != "";
+        if (this.isOpen) this._container.classList.add("slds-is-open");
+        else this._container.classList.remove("slds-is-open");
+    }
+
+    keyPress(e) {
+        if (e.which == 13) this.modal();
+    }
+
+    modal() {
+        this.displayModal = !this.displayModal;
+        //this.isOpen = this.displayModal ? false : this.isOpen; //NOTE: desplegar resultados al hacer click en el input
+    }
+
+    handleModalSubmit() {}
+
+    get modalHeader() {
+        return this.label != null ? this.label : this.sobjectApiName;
+    }
 }

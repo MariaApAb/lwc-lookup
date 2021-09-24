@@ -3,12 +3,30 @@
     <div class="cLookup slds-form-element">
         <div class="slds-form-element__control" onblur={handleOnBlur}>
             <div data-id="comboboxContainer" class="slds-combobox_container">
-                <div if:true={selected} class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
-                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                <div
+                    if:true={selected}
+                    class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    role="combobox"
+                >
+                    <div
+                        class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right"
+                        role="none"
+                    >
                         <span class="slds-icon_container slds-combobox__input-entity-icon">
-                            <lightning-icon icon-name={iconName} size="x-small" alternative-text="Search"></lightning-icon>
+                            <lightning-icon
+                                icon-name={iconName}
+                                size="x-small"
+                                alternative-text="Search"
+                            ></lightning-icon>
                         </span>
-                        <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" value={selectedObj.title} readonly/>
+                        <input
+                            type="text"
+                            class="slds-input slds-combobox__input slds-combobox__input-value"
+                            value={selectedObj.title}
+                            readonly
+                        />
                         <!--<div class="slds-input__icon-group slds-input__icon-group_right">
                             <lightning-button-icon
                                 class="slds-input__icon-group slds-input__icon-group_right slds-input__icon_right"
@@ -21,14 +39,30 @@
                             ></lightning-button-icon>
                         </div>-->
                         <div class="slds-input__icon-group slds-input__icon-group_right">
-                            <button type="button" title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick={removeSelected}>
-                                <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Search"></lightning-icon>
+                            <button
+                                type="button"
+                                title="Clear Selection"
+                                class="slds-button slds-button_icon slds-input__icon slds-input__icon_right"
+                                onclick={removeSelected}
+                            >
+                                <lightning-icon
+                                    icon-name="utility:close"
+                                    size="x-small"
+                                    alternative-text="Search"
+                                ></lightning-icon>
                                 <span class="slds-assistive-text">Clear Selection</span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div if:false={selected} data-id="combobox" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                <div
+                    if:false={selected}
+                    data-id="combobox"
+                    class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+                    role="combobox"
+                >
                     <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
                         <lightning-input
                             name="enter-search"
@@ -37,17 +71,34 @@
                             variant="label-hidden"
                             placeholder={placeholder}
                             onchange={search}
+                            onkeypress={keyPress}
                         ></lightning-input>
                     </div>
-                    <div if:true={isOpen} class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                    <div
+                        if:true={isOpen}
+                        class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid"
+                        role="listbox"
+                    >
                         <ul class="slds-listbox slds-listbox_vertical" role="presentation">
                             <li role="presentation" class="slds-listbox__item">
-                                <span aria-selected="true" id="option0" class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_term slds-has-focus" role="option" onclick={openModal}>
+                                <span
+                                    aria-selected="true"
+                                    id="option0"
+                                    class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_term slds-has-focus"
+                                    role="option"
+                                    onclick={modal}
+                                >
                                     <span class="slds-media__figure slds-listbox__option-icon">
-                                        <lightning-icon icon-name="utility:search" size="x-small" alternative-text="Search"></lightning-icon>
+                                        <lightning-icon
+                                            icon-name="utility:search"
+                                            size="x-small"
+                                            alternative-text="Search"
+                                        ></lightning-icon>
                                     </span>
                                     <span class="slds-media__body">
-                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">"{searchKey}" in {sobjectApiName}</span>
+                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity"
+                                            >"{searchKey}" in {sobjectApiName}</span
+                                        >
                                     </span>
                                 </span>
                             </li>
@@ -66,4 +117,20 @@
             </div>
         </div>
     </div>
+    <template if:true={displayModal}>
+        <c-modal
+            onclose={modal}
+            onsubmit={handleModalSubmit}
+            cancel-label="Cancelar"
+            submit-label="Confirmar"
+            text-header={modalHeader}
+            disabled-submit="true"
+            size="large"
+        >
+            <span slot="body"> Hola </span>
+            <span slot="footer">
+                <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={modal}></lightning-button>
+            </span>
+        </c-modal>
+    </template>
 </template>

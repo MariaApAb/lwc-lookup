@@ -1,10 +1,21 @@
 <template>
-    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class={classes}>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modal-heading-01"
+        aria-modal="true"
+        aria-describedby="modal-content-id-1"
+        class={classes}
+    >
         <div class="slds-modal__container">
             <!-- HEADER -->
             <header class="slds-modal__header">
-                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
-                    <lightning-icon 
+                <button
+                    class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                    title="Close"
+                    onclick={closeModal}
+                >
+                    <lightning-icon
                         icon-name="utility:close"
                         alternative-text="close"
                         variant="inverse"
@@ -13,7 +24,9 @@
                     ></lightning-icon>
                     <span class="slds-assistive-text">Close</span>
                 </button>
-                <h2 if:true={textHeader} id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{textHeader}</h2>
+                <h2 if:true={textHeader} id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                    {textHeader}
+                </h2>
                 <slot name="header"></slot>
             </header>
             <!-- BODY -->
@@ -25,8 +38,20 @@
             <!-- FOOTER -->
             <footer class="slds-modal__footer">
                 <slot name="footer">
-                    <button class="slds-button slds-button_neutral" onclick={close} title={cancelLabel} disabled={disabledCancel}>{cancelLabel}</button>
-                    <button class="slds-button slds-button_brand" onclick={submit} title={submitLabel} disabled={disabledSubmit}>{submitLabel}</button>
+                    <lightning-button
+                        variant="neutral"
+                        label={cancelLabel}
+                        title={cancelLabel}
+                        disabled={disabledCancel}
+                        onclick={close}
+                    ></lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        label={submitLabel}
+                        title={submitLabel}
+                        disabled={disabledSubmit}
+                        onclick={submit}
+                    ></lightning-button>
                 </slot>
             </footer>
         </div>
