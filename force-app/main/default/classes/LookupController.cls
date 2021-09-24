@@ -1,6 +1,7 @@
 public with sharing class LookupController {
 
     //TODO: pasar la negrita a js - metodo match + new RegExp(myStr, 'i');
+    //TODO: corregir posición botón x item seleccionado
 
     @AuraEnabled(cacheable=true)
     public static List<Result> findSObjects(String searchKey, String sobjectApiName, String titleApiName, String subtitleApiName) {

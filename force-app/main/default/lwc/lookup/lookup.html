@@ -4,20 +4,22 @@
         <div class="slds-form-element__control" onblur={handleOnBlur}>
             <div data-id="comboboxContainer" class="slds-combobox_container">
                 <div if:true={selected} class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click" aria-expanded="false" aria-haspopup="listbox" role="combobox">
-                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none"><!-- slds-has-selection-->
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_left-right" role="none">
                         <span class="slds-icon_container slds-combobox__input-entity-icon">
                             <lightning-icon icon-name={iconName} size="x-small" alternative-text="Search"></lightning-icon>
                         </span>
                         <input type="text" class="slds-input slds-combobox__input slds-combobox__input-value" value={selectedObj.title} readonly/>
-                        <!--<lightning-button-icon
-                            class="slds-input__icon-group slds-input__icon-group_right slds-input__icon_right"
-                            size="medium" 
-                            icon-name="utility:close" 
-                            variant="bare" 
-                            alternative-text="Clear Selection" 
-                            title="Clear Selection"
-                            onclick={removeSelected}
-                        ></lightning-button-icon>-->
+                        <!--<div class="slds-input__icon-group slds-input__icon-group_right">
+                            <lightning-button-icon
+                                class="slds-input__icon-group slds-input__icon-group_right slds-input__icon_right"
+                                size="medium" 
+                                icon-name="utility:close" 
+                                variant="bare" 
+                                alternative-text="Clear Selection" 
+                                title="Clear Selection"
+                                onclick={removeSelected}
+                            ></lightning-button-icon>
+                        </div>-->
                         <div class="slds-input__icon-group slds-input__icon-group_right">
                             <button type="button" title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick={removeSelected}>
                                 <lightning-icon icon-name="utility:close" size="x-small" alternative-text="Search"></lightning-icon>
