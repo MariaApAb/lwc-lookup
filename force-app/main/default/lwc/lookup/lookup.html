@@ -127,7 +127,21 @@
             disabled-submit="true"
             size="large"
         >
-            <span slot="body"> Hola </span>
+            <span slot="body">
+                <div style="min-height: 80vh">
+                    <c-lookup
+                        key={sobjectApiName}
+                        sobject-api-name={sobjectApiName}
+                        title-api-name={titleApiName}
+                        subtitle-api-name={subtitleApiName}
+                        icon-name={iconName}
+                        label-hidden={labelHidden}
+                        label={label}
+                        search-key={searchKey}
+                    ></c-lookup>
+                    <c-datatable fields={fields} sobject-api-name={sobjectApiName} results={}></c-datatable>
+                </div>
+            </span>
             <span slot="footer">
                 <lightning-button variant="neutral" label="Cancel" title="Cancel" onclick={modal}></lightning-button>
             </span>

@@ -9,12 +9,12 @@ export default class Lookup extends LightningElement {
     @api labelHidden;
     @api label;
     @api defaultSelectedRecord;
+    @api searchKey;
 
     @track selectedObj;
     @track sobjects = [];
     @track selected = false;
     @track isOpen = false;
-    @track searchKey;
     @track displayModal = false;
 
     placeholder;
