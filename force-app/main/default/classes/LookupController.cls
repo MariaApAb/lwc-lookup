@@ -1,12 +1,18 @@
 public with sharing class LookupController {
-
     //TODO: pasar la negrita a js - metodo match + new RegExp(myStr, 'i');
     //TODO: corregir posición botón x item seleccionado
 
     @AuraEnabled(cacheable=true)
-    public static List<Result> findSObjects(String searchKey, String sobjectApiName, String titleApiName, String subtitleApiName) {
+    public static List<Result> findSObjects(
+        String searchKey,
+        String sobjectApiName,
+        String titleApiName,
+        String subtitleApiName
+    ) {
         List<String> arguments = new List<String>{
-            '\'' + String.escapeSingleQuotes(searchKey) + '\'',
+            '\'' +
+            String.escapeSingleQuotes(searchKey) +
+            '\'',
             String.escapeSingleQuotes(sobjectApiName),
             String.escapeSingleQuotes(titleApiName),
             String.escapeSingleQuotes(subtitleApiName)
@@ -16,18 +22,50 @@ public with sharing class LookupController {
         List<List<SObject>> result = Search.query(searchQuery);
         if (!result.isEmpty()) {
             for (SObject sobj : result[0]) {
-                results.add(new Result(searchKey, (Id)sobj.get('Id'), String.valueOf(sobj.get(titleApiName)), String.valueOf(sobj.get(subtitleApiName))));
+                results.add(
+                    new Result(
+                        searchKey,
+                        (Id) sobj.get('Id'),
+                        String.valueOf(sobj.get(titleApiName)),
+                        String.valueOf(sobj.get(subtitleApiName))
+                    )
+                );
             }
         }
         System.debug(results);
         return results;
     }
 
+    @AuraEnabled(cacheable=true)
+    public static void getDatatableResults(String searchKey, String sobjectApiName, List<String> fields) {
+        System.debug(searchKey);
+        System.debug(sobjectApiName);
+        System.debug(fields);
+        try {
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static void getDatatableColumns(String sobjectApiName, List<String> fields) {
+        System.debug(sobjectApiName);
+        System.debug(fields);
+        try {
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
     public class Result {
-        @AuraEnabled public Id id;
-        @AuraEnabled public String title;
-        @AuraEnabled public String subtitle;
-        @AuraEnabled public List<TitlePart> titleParts;
+        @AuraEnabled
+        public Id id;
+        @AuraEnabled
+        public String title;
+        @AuraEnabled
+        public String subtitle;
+        @AuraEnabled
+        public List<TitlePart> titleParts;
         public Result(String searchKey, Id id, String title, String subtitle) {
             this.id = id;
             this.title = title;
@@ -41,20 +79,35 @@ public with sharing class LookupController {
             if (indexOf != -1) {
                 if (indexOf == 0) {
                     this.titleParts.add(new TitlePart(this.id + '0', title.substring(0, searchKey.length()), true));
-                    this.titleParts.add(new TitlePart(this.id + '1', title.substring(searchKey.length(), title.length()), false));
+                    this.titleParts.add(
+                        new TitlePart(this.id + '1', title.substring(searchKey.length(), title.length()), false)
+                    );
                 } else if (indexOf > 0) {
                     this.titleParts.add(new TitlePart(this.id + '0', title.substring(0, indexOf), false));
-                    this.titleParts.add(new TitlePart(this.id + '1', title.substring(indexOf, indexOf + searchKey.length()), true));
-                    if (indexOf + searchKey.length() < title.length()) this.titleParts.add(new TitlePart(this.id + '2', title.substring(indexOf + searchKey.length(), title.length()), false));
+                    this.titleParts.add(
+                        new TitlePart(this.id + '1', title.substring(indexOf, indexOf + searchKey.length()), true)
+                    );
+                    if (indexOf + searchKey.length() < title.length())
+                        this.titleParts.add(
+                            new TitlePart(
+                                this.id + '2',
+                                title.substring(indexOf + searchKey.length(), title.length()),
+                                false
+                            )
+                        );
                 }
-            } else this.titleParts.add(new TitlePart(this.id + '0', title, false));
+            } else
+                this.titleParts.add(new TitlePart(this.id + '0', title, false));
         }
     }
 
     public class TitlePart {
-        @AuraEnabled public String key;
-        @AuraEnabled public String part;
-        @AuraEnabled public Boolean strong;
+        @AuraEnabled
+        public String key;
+        @AuraEnabled
+        public String part;
+        @AuraEnabled
+        public Boolean strong;
         public TitlePart(String key, String part, Boolean strong) {
             this.key = key;
             this.part = part;
@@ -62,4 +115,6 @@ public with sharing class LookupController {
         }
     }
 
+    public class DatatableResults {
+    }
 }
