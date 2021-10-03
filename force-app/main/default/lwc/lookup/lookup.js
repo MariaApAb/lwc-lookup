@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from "lwc";
 import findSObjects from "@salesforce/apex/LookupController.findSObjects";
+import findSObjects2 from "@salesforce/apex/LookupController.findSObjects2";
 
 export default class Lookup extends LightningElement {
     @api sobjectApiName;
@@ -10,12 +11,16 @@ export default class Lookup extends LightningElement {
     @api label;
     @api defaultSelectedRecord;
     @api searchKey;
+    @api tableFields;
+    @api lookupModal = false;
 
     @track selectedObj;
     @track sobjects = [];
     @track selected = false;
     @track isOpen = false;
     @track displayModal = false;
+    @track fields = [];
+    @track results = [];
 
     placeholder;
     _error;
@@ -28,6 +33,11 @@ export default class Lookup extends LightningElement {
 
     connectedCallback() {
         this.selectedObj = this.defaultSelectedRecord;
+        this.fields = [this.titleApiName, this.subtitleApiName];
+        if (this.tableFields != null) {
+            this.fields.push(...this.tableFields.split(","));
+        }
+        console.log(JSON.stringify(this.fields, null, 2));
     }
 
     handleItemClick(e) {
@@ -42,7 +52,7 @@ export default class Lookup extends LightningElement {
         this.dispatchEvent(new CustomEvent("select", { detail: null }));
     }
 
-    search(e) {
+    /*search(e) {
         this.searchKey = e.target.value;
         if (this.searchKey != null && this.searchKey != "") {
             findSObjects({
@@ -53,6 +63,31 @@ export default class Lookup extends LightningElement {
             })
                 .then((result) => {
                     this.sobjects = result;
+                })
+                .catch((error) => {
+                    this._error = error;
+                });
+        } else {
+            this.sobjects = [];
+        }
+        this.displayList();
+    }*/
+
+    search(e) {
+        this.searchKey = e.target.value;
+        console.log(this.returnAllFields);
+        if (this.searchKey != null && this.searchKey != "" && this.searchKey.length > 2) {
+            findSObjects2({
+                searchKey: this.searchKey,
+                sobjectApiName: this.sobjectApiName,
+                fields: this.fields,
+                returnAllFields: this.lookupModal
+            })
+                .then((result) => {
+                    this.sobjects = !this.lookupModal ? result : result.slice(1);
+                    if (this.lookupModal) {
+                        this.results = result[0].data;
+                    }
                 })
                 .catch((error) => {
                     this._error = error;
@@ -74,7 +109,7 @@ export default class Lookup extends LightningElement {
     }
 
     modal() {
-        this.displayModal = !this.displayModal;
+        if (!this.lookupModal) this.displayModal = !this.displayModal;
         //this.isOpen = this.displayModal ? false : this.isOpen; //NOTE: desplegar resultados al hacer click en el input
     }
 

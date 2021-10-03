@@ -19,6 +19,7 @@ public with sharing class LookupController {
         };
         List<Result> results = new List<Result>();
         String searchQuery = String.format('FIND {0} IN ALL FIELDS RETURNING {1} (Id, {2}, {3}) LIMIT 5', arguments);
+        System.debug(searchQuery);
         List<List<SObject>> result = Search.query(searchQuery);
         if (!result.isEmpty()) {
             for (SObject sobj : result[0]) {
@@ -32,6 +33,58 @@ public with sharing class LookupController {
                 );
             }
         }
+        System.debug(results);
+        return results;
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Result> findSObjects2(
+        String searchKey,
+        String sobjectApiName,
+        List<String> fields,
+        Boolean returnAllFields
+    ) {
+        System.debug(returnAllFields);
+        List<String> arguments = new List<String>{
+            '\'' +
+            String.escapeSingleQuotes(searchKey) +
+            '\'',
+            String.escapeSingleQuotes(sobjectApiName)
+        };
+
+        List<String> argumentsAux = new List<String>();
+
+        for (Integer i = 0; i < (!returnAllFields ? 2 : fields.size()); i++) {
+            argumentsAux.add(String.escapeSingleQuotes(fields[i]));
+        }
+
+        arguments.add(String.join(argumentsAux, ','));
+
+        List<Result> results = new List<Result>();
+        String searchQuery = String.format(
+            'FIND {0} IN ALL FIELDS RETURNING {1} (Id, {2})' + (!returnAllFields ? ' LIMIT 5' : ''),
+            arguments
+        );
+        System.debug(searchQuery);
+        List<List<SObject>> result = Search.query(searchQuery);
+        if (returnAllFields) {
+            results.add(new Result(result[0]));
+        }
+        if (!result.isEmpty()) {
+            System.debug(result[0].size());
+            for (Integer i = 0; i < (result[0].size() > 5 ? 5 : result[0].size()); i++) {
+                SObject sobj = result[0][i];
+                results.add(
+                    new Result(
+                        searchKey,
+                        (Id) sobj.get('Id'),
+                        String.valueOf(sobj.get(fields[0])),
+                        String.valueOf(sobj.get(fields[1]))
+                    )
+                );
+            }
+        }
+        System.debug(results.size());
         System.debug(results);
         return results;
     }
@@ -66,12 +119,17 @@ public with sharing class LookupController {
         public String subtitle;
         @AuraEnabled
         public List<TitlePart> titleParts;
+        @AuraEnabled
+        public List<SObject> data;
         public Result(String searchKey, Id id, String title, String subtitle) {
             this.id = id;
             this.title = title;
             this.subtitle = subtitle;
             this.titleParts = new List<TitlePart>();
             getTitle(searchKey, title);
+        }
+        public Result(List<SObject> data) {
+            this.data = data;
         }
         private void getTitle(String searchKey, String title) {
             Integer indexOf = title.indexOfIgnoreCase(searchKey);

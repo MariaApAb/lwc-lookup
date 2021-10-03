@@ -8,43 +8,13 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__RecordPage,lightning__HomePage">
-            <property
-        name="sobjectApiName"
-        type="String"
-        label="Object API Name"
-        required="true"
-      />
-            <property
-        name="titleApiName"
-        type="String"
-        label="Title API Name"
-        required="true"
-      />
-            <property
-        name="subtitleApiName"
-        type="String"
-        label="Subtitle API Name"
-        required="true"
-      />
-            <property
-        name="iconName"
-        type="String"
-        label="Icon Name"
-        description="type:name"
-        required="true"
-      />
-            <property
-        name="labelHidden"
-        type="Boolean"
-        label="Label Hidden"
-        default="false"
-      />
-            <property
-        name="label"
-        type="String"
-        label="Label"
-        description="Input label"
-      />
+            <property name="sobjectApiName" type="String" label="Object API Name" required="true" />
+            <property name="titleApiName" type="String" label="Title API Name" required="true" />
+            <property name="subtitleApiName" type="String" label="Subtitle API Name" required="true" />
+            <property name="iconName" type="String" label="Icon Name" description="type:name" required="true" />
+            <property name="labelHidden" type="Boolean" label="Label Hidden" default="false" />
+            <property name="label" type="String" label="Label" description="Input label" />
+            <property name="tableFields" type="String" label="Datatable Fields" description="Fields" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
