@@ -138,8 +138,10 @@
                         label-hidden={labelHidden}
                         label={label}
                         search-key={searchKey}
+                        table-fields={tableFields}
+                        lookup-modal={displayModal}
                     ></c-lookup>
-                    <c-datatable fields={fields} sobject-api-name={sobjectApiName} results={}></c-datatable>
+                    <c-datatable fields={tableFields} sobject-api-name={sobjectApiName} results={}></c-datatable>
                 </div>
             </span>
             <span slot="footer">
