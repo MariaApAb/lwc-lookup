@@ -87,6 +87,7 @@ export default class Lookup extends LightningElement {
                     this.sobjects = !this.lookupModal ? result : result.slice(1);
                     if (this.lookupModal) {
                         this.results = result[0].data;
+                        console.log(JSON.stringify(this.results, null, 2));
                     }
                 })
                 .catch((error) => {

@@ -72,6 +72,7 @@
                             placeholder={placeholder}
                             onchange={search}
                             onkeypress={keyPress}
+                            value={searchKey}
                         ></lightning-input>
                     </div>
                     <div
@@ -141,7 +142,12 @@
                         table-fields={tableFields}
                         lookup-modal={displayModal}
                     ></c-lookup>
-                    <c-datatable fields={tableFields} sobject-api-name={sobjectApiName} results={}></c-datatable>
+                    <c-datatable
+                        fields={tableFields}
+                        sobject-api-name={sobjectApiName}
+                        results={results}
+                        hide-checkbox-column="true"
+                    ></c-datatable>
                 </div>
             </span>
             <span slot="footer">
