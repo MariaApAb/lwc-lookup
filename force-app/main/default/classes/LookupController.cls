@@ -100,16 +100,6 @@ public with sharing class LookupController {
         }
     }
 
-    @AuraEnabled(cacheable=true)
-    public static void getDatatableColumns(String sobjectApiName, List<String> fields) {
-        System.debug(sobjectApiName);
-        System.debug(fields);
-        try {
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-    }
-
     public class Result {
         @AuraEnabled
         public Id id;
